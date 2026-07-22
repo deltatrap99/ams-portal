@@ -181,18 +181,17 @@ const Dashboard = (() => {
   function renderCommission(ambassador, orders) {
     const container = document.getElementById('commissionContent');
 
-    // Calculate total from orders
-    const totalFromOrders = orders.reduce((sum, row) => {
-      return sum + parseCurrencyValue(row[1]);
-    }, 0);
-
     const totalRevenue = parseCurrencyValue(ambassador.totalRevenue);
     const monthRevenue = parseCurrencyValue(ambassador.monthRevenue);
+
+    // Hoa hồng tạm tính = 16% x Doanh thu
+    const commission = Math.round(totalRevenue * 0.16);
+    const monthCommission = Math.round(monthRevenue * 0.16);
 
     container.innerHTML = `
       <div class="profile-grid">
         <div class="profile-item">
-          <div class="label">💰 Tổng doanh thu (theo DS ĐSTT)</div>
+          <div class="label">💰 Tổng doanh thu</div>
           <div class="value" style="font-size:1.15rem;font-weight:700;color:var(--accent-emerald)">${formatCurrency(ambassador.totalRevenue)}</div>
         </div>
         <div class="profile-item">
@@ -200,8 +199,12 @@ const Dashboard = (() => {
           <div class="value" style="font-size:1.15rem;font-weight:700;color:var(--accent-amber)">${formatCurrency(ambassador.monthRevenue)}</div>
         </div>
         <div class="profile-item">
-          <div class="label">🛒 Tổng học phí từ đơn hàng</div>
-          <div class="value" style="font-size:1.15rem;font-weight:700;color:var(--accent-blue)">${totalFromOrders > 0 ? totalFromOrders.toLocaleString('vi-VN') + ' đ' : '0 đ'}</div>
+          <div class="label">🧾 Hoa hồng tạm tính (16% x Tổng DT)</div>
+          <div class="value" style="font-size:1.15rem;font-weight:700;color:var(--accent-blue)">${commission > 0 ? commission.toLocaleString('vi-VN') + ' đ' : '0 đ'}</div>
+        </div>
+        <div class="profile-item">
+          <div class="label">📌 Hoa hồng tháng hiện tại (16% x DT tháng)</div>
+          <div class="value" style="font-size:1.15rem;font-weight:700;color:var(--accent-cyan)">${monthCommission > 0 ? monthCommission.toLocaleString('vi-VN') + ' đ' : '0 đ'}</div>
         </div>
       </div>
     `;
