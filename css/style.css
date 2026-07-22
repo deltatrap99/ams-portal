@@ -679,33 +679,66 @@ body {
   text-decoration: underline;
 }
 
-.profile-item .value.copy-text {
-  cursor: pointer;
-  position: relative;
-}
-
-.profile-item .value.copy-text:hover {
-  color: var(--accent-blue);
-}
-
-.copy-tooltip {
-  position: absolute;
-  top: -28px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--accent-emerald);
-  color: white;
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 0.7rem;
+.profile-item .value .copy-value {
   font-weight: 600;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--transition-fast);
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
 }
 
-.copy-tooltip.show {
-  opacity: 1;
+/* ---- Copy Button ---- */
+.btn-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  padding: 6px 14px;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 6px;
+  color: var(--accent-blue);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-copy:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+.btn-copy:active {
+  transform: translateY(0);
+}
+
+.btn-copy .btn-copy-done {
+  display: none;
+}
+
+.btn-copy.copied {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: var(--accent-emerald);
+  animation: copyPop 0.3s ease;
+}
+
+.btn-copy.copied .btn-copy-icon,
+.btn-copy.copied .btn-copy-text {
+  display: none;
+}
+
+.btn-copy.copied .btn-copy-done {
+  display: inline;
+}
+
+@keyframes copyPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 /* ---- Data Tables ---- */

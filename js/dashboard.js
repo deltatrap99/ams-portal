@@ -72,15 +72,30 @@ const Dashboard = (() => {
       { label: 'Mã Đại sứ kết nối', value: amb.connectorCode || '--', icon: '🤝' },
       { label: 'PD hỗ trợ', value: pdName, icon: '👨‍💼' },
       { label: 'Mã code V-ACT', value: amb.vactCode || '--', icon: '🎫', copyable: true },
-      { label: 'Link giới thiệu ĐSTT mới', value: amb.referralLink || '--', icon: '🔗', isLink: true },
+      { label: 'Link giới thiệu ĐSTT mới', value: amb.referralLink || '--', icon: '🔗', isLink: true, copyable: true },
     ];
 
     grid.innerHTML = items.map(item => {
       let valueHtml;
       if (item.isLink && item.value !== '--') {
-        valueHtml = `<a href="${item.value}" target="_blank" rel="noopener">${item.value}</a>`;
+        const shortLink = item.value.length > 50 ? item.value.substring(0, 50) + '...' : item.value;
+        valueHtml = `
+          <a href="${item.value}" target="_blank" rel="noopener">${shortLink}</a>
+          <button class="btn-copy" onclick="Dashboard.copyToClipboard(this, '${item.value}')" title="Sao chép link">
+            <span class="btn-copy-icon">📋</span>
+            <span class="btn-copy-text">Copy</span>
+            <span class="btn-copy-done">✅ Đã copy</span>
+          </button>
+        `;
       } else if (item.copyable && item.value !== '--') {
-        valueHtml = `<span class="copy-text" onclick="Dashboard.copyToClipboard(this, '${item.value}')">${item.value} 📋<span class="copy-tooltip">Đã sao chép!</span></span>`;
+        valueHtml = `
+          <span class="copy-value">${item.value}</span>
+          <button class="btn-copy" onclick="Dashboard.copyToClipboard(this, '${item.value}')" title="Sao chép mã">
+            <span class="btn-copy-icon">📋</span>
+            <span class="btn-copy-text">Copy</span>
+            <span class="btn-copy-done">✅ Đã copy</span>
+          </button>
+        `;
       } else {
         valueHtml = item.value;
       }
@@ -302,13 +317,10 @@ const Dashboard = (() => {
     }
   }
 
-  function copyToClipboard(element, text) {
+  function copyToClipboard(btn, text) {
     navigator.clipboard.writeText(text).then(() => {
-      const tooltip = element.querySelector('.copy-tooltip');
-      if (tooltip) {
-        tooltip.classList.add('show');
-        setTimeout(() => tooltip.classList.remove('show'), 1500);
-      }
+      btn.classList.add('copied');
+      setTimeout(() => btn.classList.remove('copied'), 2000);
     });
   }
 
