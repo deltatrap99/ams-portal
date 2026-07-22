@@ -23,6 +23,9 @@
    * Initialize the application
    */
   function init() {
+    // Initialize theme
+    initTheme();
+
     if (Auth.isLoggedIn()) {
       const ambassador = Auth.getSession();
       showDashboard(ambassador);
@@ -38,6 +41,50 @@
     if (refreshBtn) {
       refreshBtn.addEventListener('click', handleManualRefresh);
     }
+
+    // Theme toggle buttons
+    const themeBtn = document.getElementById('themeBtn');
+    const loginThemeBtn = document.getElementById('loginThemeBtn');
+    if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+    if (loginThemeBtn) loginThemeBtn.addEventListener('click', toggleTheme);
+  }
+
+  /**
+   * Initialize theme from localStorage
+   */
+  function initTheme() {
+    const saved = localStorage.getItem('ams_theme');
+    if (saved === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+    updateThemeIcons();
+  }
+
+  /**
+   * Toggle between light and dark theme
+   */
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme');
+    const newTheme = current === 'light' ? 'dark' : 'light';
+
+    if (newTheme === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+
+    localStorage.setItem('ams_theme', newTheme);
+    updateThemeIcons();
+  }
+
+  /**
+   * Update all theme toggle button icons
+   */
+  function updateThemeIcons() {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    const icon = isLight ? '☀️' : '🌙';
+    const btns = document.querySelectorAll('.btn-theme');
+    btns.forEach(btn => btn.textContent = icon);
   }
 
   /**
