@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cổng Tra Cứu Đại Sứ Tiếp Thị | AMS Affiliate</title>
+  <meta name="description" content="Cổng tra cứu thông tin hoạt động dành cho Đại sứ Tiếp thị - AMS Affiliate Portal">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-pattern"></div>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Đang tải dữ liệu...</div>
+  </div>
+
+  <!-- ============ LOGIN PAGE ============ -->
+  <div id="loginPage" class="login-container">
+    <div class="login-card">
+      <div class="login-logo">
+        <img src="assets/logo.svg" alt="AMS Affiliate Logo" onerror="this.style.display='none'">
+      </div>
+      <div class="login-header">
+        <h1>Cổng Tra Cứu</h1>
+        <p>Đại sứ vui lòng đăng nhập bằng Mã Đại sứ Tiếp thị và Mật khẩu được cấp</p>
+      </div>
+
+      <div id="loginError" class="error-message">
+        <span>⚠️</span>
+        <span id="loginErrorText">Mã Đại sứ hoặc Mật khẩu không đúng</span>
+      </div>
+
+      <form id="loginForm" autocomplete="off">
+        <div class="form-group">
+          <label for="loginCode">Mã Đại Sứ Tiếp Thị</label>
+          <div class="input-wrapper">
+            <input type="text" id="loginCode" class="form-input" placeholder="Nhập mã AMS..." required autofocus>
+            <span class="input-icon">🔑</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Mật Khẩu</label>
+          <div class="input-wrapper">
+            <input type="password" id="loginPassword" class="form-input" placeholder="Nhập mật khẩu cổng tra cứu..." required>
+            <span class="input-icon">🔒</span>
+          </div>
+        </div>
+
+        <button type="submit" id="loginBtn" class="btn-primary">
+          <span class="btn-text">Đăng Nhập</span>
+          <span class="spinner"></span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============ DASHBOARD ============ -->
+  <div id="dashboardPage" class="dashboard-container">
+    <!-- Header -->
+    <header class="dashboard-header">
+      <div class="header-inner">
+        <div class="header-left">
+          <img src="assets/logo.svg" alt="Logo" onerror="this.style.display='none'">
+          <h2>Cổng Tra Cứu ĐSTT</h2>
+        </div>
+        <div class="header-right">
+          <div class="user-info">
+            <div id="userAvatar" class="user-avatar">DS</div>
+            <div>
+              <div id="headerUserName" class="user-name">-</div>
+              <div id="headerUserCode" class="user-code">Mã AMS: -</div>
+            </div>
+          </div>
+          <button id="logoutBtn" class="btn-logout">Đăng xuất</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="dashboard-content">
+      <!-- Welcome Banner -->
+      <div class="welcome-banner">
+        <h2>Xin chào, <span id="welcomeName">Đại sứ</span> 👋</h2>
+        <p>Chào mừng bạn quay trở lại cổng tra cứu thông tin hoạt động.</p>
+      </div>
+
+      <!-- Refresh Bar -->
+      <div class="refresh-bar">
+        <div class="refresh-status">
+          <span class="pulse-dot"></span>
+          <span id="refreshCountdown">Tự động cập nhật sau 30 phút</span>
+        </div>
+        <button id="refreshBtn" class="btn-refresh" title="Làm mới dữ liệu">
+          <span class="refresh-icon">🔄</span>
+          <span>Làm mới</span>
+        </button>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon blue">📊</div>
+          <div id="statRevenue" class="stat-value">0</div>
+          <div class="stat-label">Tổng doanh thu</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon emerald">📦</div>
+          <div id="statOrders" class="stat-value">0</div>
+          <div class="stat-label">Đơn hàng</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple">👥</div>
+          <div id="statConnected" class="stat-value">0</div>
+          <div class="stat-label">ĐS kết nối</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon amber">💰</div>
+          <div id="statMonthRevenue" class="stat-value">0</div>
+          <div class="stat-label">Doanh thu tháng</div>
+        </div>
+      </div>
+
+      <!-- Section 1: Profile -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon blue">📋</div>
+          <h3>Hồ Sơ Hoạt Động</h3>
+        </div>
+        <div class="section-body">
+          <div id="profileGrid" class="profile-grid">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Orders -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon emerald">🛒</div>
+          <h3>Danh Sách Đơn Hàng</h3>
+          <span id="ordersBadge" class="badge">0 đơn</span>
+        </div>
+        <div class="section-body">
+          <div id="ordersContent" class="table-wrapper">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Commission -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon amber">💵</div>
+          <h3>Hoa Hồng Tạm Tính</h3>
+        </div>
+        <div class="section-body">
+          <div id="commissionContent">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Connected Ambassadors -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon purple">🤝</div>
+          <h3>Danh Sách Đại Sứ Tiếp Thị Đã Kết Nối</h3>
+          <span id="connectedBadge" class="badge">0 người</span>
+        </div>
+        <div class="section-body">
+          <div id="connectedContent" class="table-wrapper">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+      <p>© 2026 AMS Affiliate - Cổng Tra Cứu Đại Sứ Tiếp Thị</p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/sheets.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
