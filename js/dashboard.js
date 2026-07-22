@@ -62,17 +62,15 @@ const Dashboard = (() => {
 
     const items = [
       { label: 'Mã Đại sứ Tiếp thị', value: amb.code, icon: '🏷️' },
-      { label: 'Họ và tên', value: amb.name, icon: '👤' },
+      { label: 'Họ tên', value: amb.name, icon: '👤' },
       { label: 'Số điện thoại', value: amb.phone, icon: '📱' },
       { label: 'Email cá nhân', value: amb.email, icon: '📧' },
-      { label: 'Email Hocmai', value: amb.emailHocmai, icon: '🎓' },
-      { label: 'Ngày đăng ký', value: amb.registrationDate, icon: '📅' },
-      { label: 'Ngày tạo mã', value: amb.createdDate, icon: '📆' },
-      { label: 'Nguồn', value: amb.source || '--', icon: '🔗' },
-      { label: 'Mã Đại sứ kết nối', value: amb.connectorCode || '--', icon: '🤝' },
-      { label: 'PD hỗ trợ', value: pdName, icon: '👨‍💼' },
+      { label: 'Email công ty', value: amb.emailHocmai, icon: '🏢' },
+      { label: 'Mã Đại sứ giới thiệu', value: amb.connectorCode || '--', icon: '🤝' },
+      { label: 'Mật khẩu cổng tra cứu', value: amb.password, icon: '🔒' },
+      { label: 'PD hỗ trợ', value: amb.pd || '--', icon: '👨‍💼' },
+      { label: 'Link giới thiệu Đại sứ Tiếp thị mới', value: amb.referralLink || '--', icon: '🔗', isLink: true, copyable: true },
       { label: 'Mã code V-ACT', value: amb.vactCode || '--', icon: '🎫', copyable: true },
-      { label: 'Link giới thiệu ĐSTT mới', value: amb.referralLink || '--', icon: '🔗', isLink: true, copyable: true },
     ];
 
     grid.innerHTML = items.map(item => {
@@ -144,30 +142,24 @@ const Dashboard = (() => {
       return;
     }
 
-    // Order columns: A(0)=Mã đơn, B(1)=Học phí, C(2)=Ngày tạo, D(3)=Ngày xác nhận,
-    // E(4)=Họ tên HV, F(5)=SĐT, G(6)=Email HV, H(7)=Mã code ĐSTT,
-    // I(8)=landing_page_code, J(9)=Mã ĐSTT, K(10)=Họ tên ĐSTT, L(11)=Tháng, M(12)=Khóa học
+    // Dashboard sheet shows: Họ tên HV, SĐT HV, Khóa học, Học phí thực đóng
     container.innerHTML = `
       <table class="data-table">
         <thead>
           <tr>
-            <th>Mã đơn</th>
             <th>Họ tên Học viên</th>
-            <th>SĐT</th>
+            <th>SĐT Học viên</th>
             <th>Khóa học</th>
-            <th>Học phí</th>
-            <th>Ngày tạo</th>
+            <th>Học phí thực đóng</th>
           </tr>
         </thead>
         <tbody>
           ${orders.map(row => `
             <tr>
-              <td>${row[0] || '--'}</td>
               <td>${row[4] || '--'}</td>
               <td>${row[5] || '--'}</td>
               <td>${row[12] || '--'}</td>
               <td class="amount">${formatCurrency(row[1])}</td>
-              <td>${formatDate(row[2])}</td>
             </tr>
           `).join('')}
         </tbody>
@@ -188,6 +180,10 @@ const Dashboard = (() => {
     const commission = Math.round(totalRevenue * 0.16);
     const monthCommission = Math.round(monthRevenue * 0.16);
 
+    // Get current month label (e.g. "Tháng 7/2026")
+    const now = new Date();
+    const monthLabel = `Tháng ${now.getMonth() + 1}/${now.getFullYear()}`;
+
     container.innerHTML = `
       <div class="profile-grid">
         <div class="profile-item">
@@ -195,7 +191,7 @@ const Dashboard = (() => {
           <div class="value" style="font-size:1.15rem;font-weight:700;color:var(--accent-emerald)">${formatCurrency(ambassador.totalRevenue)}</div>
         </div>
         <div class="profile-item">
-          <div class="label">📅 Doanh thu tháng hiện tại</div>
+          <div class="label">📅 Doanh thu ${monthLabel}</div>
           <div class="value" style="font-size:1.15rem;font-weight:700;color:var(--accent-amber)">${formatCurrency(ambassador.monthRevenue)}</div>
         </div>
         <div class="profile-item">
@@ -203,7 +199,7 @@ const Dashboard = (() => {
           <div class="value" style="font-size:1.15rem;font-weight:700;color:var(--accent-blue)">${commission > 0 ? commission.toLocaleString('vi-VN') + ' đ' : '0 đ'}</div>
         </div>
         <div class="profile-item">
-          <div class="label">📌 Hoa hồng tháng hiện tại (16% x DT tháng)</div>
+          <div class="label">📌 Hoa hồng ${monthLabel} (16% x DT tháng)</div>
           <div class="value" style="font-size:1.15rem;font-weight:700;color:var(--accent-cyan)">${monthCommission > 0 ? monthCommission.toLocaleString('vi-VN') + ' đ' : '0 đ'}</div>
         </div>
       </div>
